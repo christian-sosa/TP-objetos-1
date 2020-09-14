@@ -44,6 +44,7 @@ public class Articulo {
     public double getPrecio() {
         return precio;
     }
+
     @Override
     public String toString() {
         return "Articulo{" +

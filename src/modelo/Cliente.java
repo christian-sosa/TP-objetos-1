@@ -1,11 +1,12 @@
 package modelo;
 
-public class Cliente {
+public class Cliente extends Actor {
     private String apellido;
     private String nombre;
     private int dni;
 
-    public Cliente(String apellido, String nombre, int dni) {
+    public Cliente(int id, Contacto contacto, String apellido, String nombre, int dni) {
+        super(id, contacto);
         this.apellido = apellido;
         this.nombre = nombre;
         this.dni = dni;
@@ -33,14 +34,10 @@ public class Cliente {
 
     public void setDni(int dni) {
         this.dni = dni;
+
     }
 
-    @Override
-    public String toString() {
-        return "cliente{" +
-                "dni=" + dni +
-                ", nombre=" + nombre +
-                ", apellido=" + apellido +
-                '}';
+    public void validarDni (String dni){
+
     }
 }

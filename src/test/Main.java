@@ -51,6 +51,11 @@ public class Main {
         //Agregamos items al carrito
         Articulo articulo = new Articulo(1, "Articulo", "CodBarras", 12.3);
 
+        // Instancio una ubicacion y la traigo con traerUbicacion
+        Ubicacion MiCasa  = new Ubicacion(2.4,7.5);
+        System.out.println(" mi casa esta en  " + MiCasa.traerUbicacion());
+
+
         Scanner in = new Scanner(System.in);
     }
 }

@@ -24,6 +24,14 @@ public class Ubicacion {
     public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
+
+    //preguntar por que devolver un Ubicacion
+    public String traerUbicacion(){
+        return " La latitud es " + getLatitud() +
+                "La longitud es " + getLongitud();
+
+
+    }
 }
 
 

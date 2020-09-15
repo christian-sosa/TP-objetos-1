@@ -12,12 +12,13 @@ public class Carrito {
     private double descuento;
     private Cliente cliente;
     private List<ItemCarrito> itemCarrito;
-    private long conflictivo;
+    private Entrega entrega;
+
 
     public Carrito() {
     }
 
-    public Carrito(int idCarrito, LocalDate fecha, LocalTime hora, boolean cerrado, double descuento, Cliente cliente, List<ItemCarrito> itemCarrito) {
+    public Carrito(int idCarrito, LocalDate fecha, LocalTime hora, boolean cerrado, double descuento, Cliente cliente, List<ItemCarrito> itemCarrito, Entrega entrega) {
         this.idCarrito = idCarrito;
         this.fecha = fecha;
         this.hora = hora;
@@ -25,9 +26,11 @@ public class Carrito {
         this.descuento = descuento;
         this.cliente = cliente;
         this.itemCarrito = itemCarrito;
+        this.entrega = entrega;
     }
 
-    public int getIdCarrito() {
+
+	public int getIdCarrito() {
         return idCarrito;
     }
 
@@ -82,4 +85,12 @@ public class Carrito {
     public void setItemCarrito(List<ItemCarrito> itemCarrito) {
         this.itemCarrito = itemCarrito;
     }
+
+	public Entrega getEntrega() {
+		return entrega;
+	}
+
+	public void setEntrega(Entrega entrega) {
+		this.entrega = entrega;
+	}
 }

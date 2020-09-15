@@ -12,6 +12,7 @@ public class Carrito {
     private double descuento;
     private Cliente cliente;
     private List<ItemCarrito> itemCarrito;
+    private long conflictivo;
 
     public Carrito() {
     }

@@ -30,7 +30,7 @@ public class Carrito {
     }
 
 
-	public int getIdCarrito() {
+    public int getIdCarrito() {
         return idCarrito;
     }
 
@@ -86,11 +86,11 @@ public class Carrito {
         this.itemCarrito = itemCarrito;
     }
 
-	public Entrega getEntrega() {
-		return entrega;
-	}
+    public Entrega getEntrega() {
+        return entrega;
+    }
 
-	public void setEntrega(Entrega entrega) {
-		this.entrega = entrega;
-	}
+    public void setEntrega(Entrega entrega) {
+        this.entrega = entrega;
+    }
 }

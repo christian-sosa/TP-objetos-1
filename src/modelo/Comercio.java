@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.List;
 
-public class Comercio  extends Actor{
+public class Comercio extends Actor {
 
     private String nombreComercio;
     private long cuit;

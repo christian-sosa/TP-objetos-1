@@ -37,7 +37,7 @@ public class Cliente extends Actor {
 
     }
 
-    public void validarDni (String dni){
+    public void validarDni(String dni) {
 
     }
 }

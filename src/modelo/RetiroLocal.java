@@ -20,4 +20,9 @@ public class RetiroLocal {
     public LocalTime traerHoraRetiro(LocalDate fecha){
     return getHoraEntrega();
     }
+
+	@Override
+	public String toString() {
+		return "RetiroLocal [horaEntrega=" + horaEntrega + "]";
+	}
 }

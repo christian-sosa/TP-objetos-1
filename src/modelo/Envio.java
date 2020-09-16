@@ -47,4 +47,10 @@ public class Envio {
     public void setUbicacion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
     }
+
+	@Override
+	public String toString() {
+		return "Envio [horaHasta=" + horaHasta + ", horaDesde=" + horaDesde + ", costo=" + costo + ", ubicacion="
+				+ ubicacion + "]";
+	}
 }

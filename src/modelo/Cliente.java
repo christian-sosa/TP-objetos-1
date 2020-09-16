@@ -40,4 +40,9 @@ public class Cliente extends Actor {
     public void validarDni(String dni) {
 
     }
+
+	@Override
+	public String toString() {
+		return "Cliente [apellido=" + apellido + ", nombre=" + nombre + ", dni=" + dni + "]";
+	}
 }

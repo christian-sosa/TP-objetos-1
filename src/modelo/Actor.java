@@ -18,4 +18,9 @@ public abstract class Actor {
         this.id = id;
     }
 
+	@Override
+	public String toString() {
+		return "Actor [id=" + id + ", contacto=" + contacto + "]";
+	}
+
 }

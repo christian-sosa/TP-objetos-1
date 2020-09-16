@@ -93,4 +93,21 @@ public class Carrito {
     public void setEntrega(Entrega entrega) {
         this.entrega = entrega;
     }
+    @Override
+	public String toString() {
+		return "Carrito [idCarrito=" + idCarrito + ", fecha=" + fecha + ", hora=" + hora + ", cerrado=" + cerrado
+				+ ", descuento=" + descuento + ", cliente=" + cliente + ", itemCarrito=" + itemCarrito + ", entrega="
+				+ entrega + "]";
+	}
+    
+    public double calcularTotalCarrito() {
+    	double total=0;
+    	
+    	for(int i=0;i<this.getItemCarrito().size();i++) {
+    		total = total+total;
+    		total = itemCarrito.get(i).getCantidad()*itemCarrito.get(i).getArticulo().getPrecio();   		 		
+    	}
+    	return total;
+    }
+    
 }

@@ -60,7 +60,13 @@ public class Main {
         
         //Calcular totalCarrito
         System.out.println(carrito.calcularTotalCarrito());
-        
+
+        //calcular descuento efectivo
+        System.out.println(carrito.calcularDescuentoEfectivo(comercio.getPorcentajeDescuentoEfectivo()));
+
+        //calcular descuento dia
+        System.out.println(carrito.calcularDescuentoDia(comercio.getPorcentajeDescuentoDia()));
+
 
 
         Scanner in = new Scanner(System.in);

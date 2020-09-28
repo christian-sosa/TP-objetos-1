@@ -26,11 +26,10 @@ public class Ubicacion {
     }
 
     //preguntar por que devolver un Ubicacion
-    public String traerUbicacion(){
-        return " La latitud es " + getLatitud() +
-                "La longitud es " + getLongitud();
+    public Ubicacion traerUbicacion(){
 
-
+        //return new Ubicacion (latitud,longitud);
+        return this;
     }
 
 	@Override

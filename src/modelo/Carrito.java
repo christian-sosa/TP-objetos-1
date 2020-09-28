@@ -109,5 +109,13 @@ public class Carrito {
     	}
     	return total;
     }
-    
+
+
+    public double calcularDescuentoEfectivo(double porcentajeDescuentoEfectivo){
+    return calcularTotalCarrito()*porcentajeDescuentoEfectivo/100;
+    }
+    public double calcularDescuentoDia(double porcentajeDescuentoDia){
+        return calcularTotalCarrito()*porcentajeDescuentoDia/100;
+    }
+   
 }

@@ -104,4 +104,6 @@ public class Comercio extends Actor {
                 ", diaRetiros=" + diaRetiros +
                 '}';
     }
+
+
 }

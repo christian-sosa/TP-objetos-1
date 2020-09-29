@@ -1,8 +1,10 @@
 package modelo;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Date;
 
 public class Carrito {
     private int idCarrito;
@@ -114,8 +116,33 @@ public class Carrito {
     public double calcularDescuentoEfectivo(double porcentajeDescuentoEfectivo){
     return calcularTotalCarrito()*porcentajeDescuentoEfectivo/100;
     }
-    public double calcularDescuentoDia(double porcentajeDescuentoDia){
-        return calcularTotalCarrito()*porcentajeDescuentoDia/100;
+    public double calcularDescuentoDia(int diaDescuento, double porcentajeDescuentoDia){
+    return 0;
+        
     }
+    public double calcularDescuentoCarrito(int diaDescuento, double porcentajeDescuento, double porcentajeDescuentoEfectivo) {
+    	double descuento;
+    	LocalDate ClockInfoFromSystem = LocalDate.now();
+    	int day1= (int)ClockInfoFromSystem.DayOfWeek;
+        if(day1 == diaDescuento) {
+    	   if(porcentajeDescuento>porcentajeDescuentoEfectivo) {
+    		   descuento=porcentajeDescuento;
+    	   }
+    	   else {
+    		   descuento=porcentajeDescuentoEfectivo;
+    	   }  		 
+        }
+        else {
+        	descuento=porcentajeDescuentoEfectivo;
+        }
+        return descuento;      			
+    }
+    public double totalAPagarCarrito(){
+    	double total = this.calcularTotalCarrito();
+    	double descuento = this.getDescuento();
+    	return total-descuento;
+    }
+    
+    
    
 }

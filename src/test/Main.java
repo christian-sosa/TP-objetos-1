@@ -66,6 +66,8 @@ public class Main {
 
         //calcular descuento dia
         System.out.println(carrito.calcularDescuentoDia(comercio.getPorcentajeDescuentoDia()));
+        //total a pagar
+        System.out.println(carrito.totalAPagarCarrito());
 
 
 

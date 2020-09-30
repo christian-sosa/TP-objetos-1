@@ -14,13 +14,15 @@ public class Carrito {
     private double descuento;
     private Cliente cliente;
     private List<ItemCarrito> itemCarrito;
+    private List<DiaRetiro> diaRetiros;
     private Entrega entrega;
 
 
     public Carrito() {
     }
 
-    public Carrito(int idCarrito, LocalDate fecha, LocalTime hora, boolean cerrado, double descuento, Cliente cliente, List<ItemCarrito> itemCarrito, Entrega entrega) {
+    public Carrito(int idCarrito, LocalDate fecha, LocalTime hora, boolean cerrado, double descuento, Cliente cliente,
+                   List<ItemCarrito> itemCarrito, Entrega entrega, List<DiaRetiro> diaRetiros) {
         this.idCarrito = idCarrito;
         this.fecha = fecha;
         this.hora = hora;
@@ -29,8 +31,16 @@ public class Carrito {
         this.cliente = cliente;
         this.itemCarrito = itemCarrito;
         this.entrega = entrega;
+        this.diaRetiros = diaRetiros;
     }
 
+    public List<DiaRetiro> getDiaRetiros() {
+        return diaRetiros;
+    }
+
+    public void setDiaRetiros(List<DiaRetiro> diaRetiros) {
+        this.diaRetiros = diaRetiros;
+    }
 
     public int getIdCarrito() {
         return idCarrito;
@@ -101,18 +111,14 @@ public class Carrito {
 				+ ", descuento=" + descuento + ", cliente=" + cliente + ", itemCarrito=" + itemCarrito + ", entrega="
 				+ entrega + "]";
 	}
-    
+
     public double calcularTotalCarrito() {
     	double total=0;
-    	
     	for(int i=0;i<this.getItemCarrito().size();i++) {
-    		total = total+total;
-    		total = itemCarrito.get(i).getCantidad()*itemCarrito.get(i).getArticulo().getPrecio();   		 		
+    		total +=itemCarrito.get(i).getCantidad()*itemCarrito.get(i).getArticulo().getPrecio();
     	}
     	return total;
     }
-
-
     public double calcularDescuentoEfectivo(double porcentajeDescuentoEfectivo){
     return calcularTotalCarrito()*porcentajeDescuentoEfectivo/100;
     }
@@ -122,9 +128,10 @@ public class Carrito {
     }
     public double calcularDescuentoCarrito(int diaDescuento, double porcentajeDescuento, double porcentajeDescuentoEfectivo) {
     	double descuento;
-    	LocalDate ClockInfoFromSystem = LocalDate.now();
-    	int day1= (int)ClockInfoFromSystem.DayOfWeek;
-        if(day1 == diaDescuento) {
+
+    	LocalDate localDate = LocalDate.now();
+
+    	if(localDate.getDayOfWeek().getValue() == diaDescuento) {
     	   if(porcentajeDescuento>porcentajeDescuentoEfectivo) {
     		   descuento=porcentajeDescuento;
     	   }
@@ -142,7 +149,10 @@ public class Carrito {
     	double descuento = this.getDescuento();
     	return total-descuento;
     }
-    
-    
-   
+
+    public boolean agregarDiaRetiro(int diaSemana, LocalTime horaDesde, LocalTime horaHasta, int intervalo){
+         this.diaRetiros.add(new DiaRetiro(1, diaSemana, horaDesde, horaHasta, intervalo));
+         return true;
+    }
 }
+

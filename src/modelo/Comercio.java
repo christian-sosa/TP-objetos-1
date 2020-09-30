@@ -1,5 +1,8 @@
 package modelo;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Comercio extends Actor {
@@ -105,5 +108,34 @@ public class Comercio extends Actor {
                 '}';
     }
 
+    public List<Turno> generarTurnos (LocalDate fecha){
+        List<Turno> listaTurnos = new ArrayList<>();
+        DiaRetiro diaRetiro = this.obtenerDiaRetiro(fecha);
+        LocalTime horaDesde = diaRetiro.getHoraDesde();
+        LocalTime horaHasta = diaRetiro.getHoraHasta();
+
+        while(horaDesde.isBefore(horaHasta)){
+            listaTurnos.add(new Turno(fecha, horaDesde, false));
+            horaDesde = horaDesde.plusMinutes(diaRetiro.getIntervalo());
+        }
+        return  listaTurnos;
+    }
+
+    private DiaRetiro obtenerDiaRetiro(LocalDate fecha){
+        DiaRetiro diaRetiro = null;
+        boolean encontrado  = false;
+        int i = 0;
+        while (encontrado == false && i< this.diaRetiros.size()) {
+            if(this.diaRetiros.get(i).getDiaSemana() == fecha.getDayOfWeek().getValue()){
+                diaRetiro = this.diaRetiros.get(i);
+                encontrado = true;
+            }
+            i++;
+        }
+        if (diaRetiro == null){
+            throw new RuntimeException("No se encuentra dia de retiro con ese numero de dia de semana");
+        }
+        return diaRetiro;
+    }
 
 }

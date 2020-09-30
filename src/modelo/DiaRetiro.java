@@ -57,6 +57,8 @@ public class DiaRetiro {
         this.intervalo = intervalo;
     }
 
+
+
     @Override
     public String toString() {
         return "DiaRetiro{" +

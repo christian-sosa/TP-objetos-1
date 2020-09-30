@@ -32,20 +32,24 @@ public class Main {
         //Instanciamos lo necesario para un comercio
         Ubicacion ubicacionComercio = new Ubicacion(50, 50);
         Contacto contactoComercio = new Contacto("Comercio@mail.com", "12341234", ubicacionComercio);
-        DiaRetiro diaRetiro = new DiaRetiro(1, 2, LocalTime.of(9, 30),
-                LocalTime.of(18, 0), 3);
+        DiaRetiro diaRetiro1 = new DiaRetiro(1, 2, LocalTime.of(9, 30),
+                LocalTime.of(18, 0), 30);
+        DiaRetiro diaRetiro2 = new DiaRetiro(1, 3, LocalTime.of(9, 30),
+                LocalTime.of(18, 0), 30);
+
         Comercio comercio = new Comercio(1, contactoComercio, "Nombre Comercio", 999999999,
                 10, 10, 3, 10,
                 10, new ArrayList<>());
-        comercio.getDiaRetiros().add(diaRetiro);
-
+        comercio.getDiaRetiros().add(diaRetiro1);
+        comercio.getDiaRetiros().add(diaRetiro2);
+        System.out.println(comercio.generarTurnos(LocalDate.now()));
         // Instanciamos una entrega
         Entrega entrega = new Entrega(1, LocalDate.now(), true);
 
         //Agregamos carrito al comercio
 
         Carrito carrito = new Carrito(1, LocalDate.now(), LocalTime.now(),
-                false, 10, cliente, new ArrayList<>(), entrega);
+                false, 10, cliente, new ArrayList<>(), entrega, new ArrayList<>());
 
 
         //Agregamos items al carrito
@@ -65,7 +69,7 @@ public class Main {
         System.out.println(carrito.calcularDescuentoEfectivo(comercio.getPorcentajeDescuentoEfectivo()));
 
         //calcular descuento dia
-        System.out.println(carrito.calcularDescuentoDia(comercio.getPorcentajeDescuentoDia()));
+        System.out.println(carrito.calcularDescuentoDia(1, comercio.getPorcentajeDescuentoDia()));
         //total a pagar
         System.out.println(carrito.totalAPagarCarrito());
 

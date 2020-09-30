@@ -150,9 +150,39 @@ public class Carrito {
     	return total-descuento;
     }
 
-    public boolean agregarDiaRetiro(int diaSemana, LocalTime horaDesde, LocalTime horaHasta, int intervalo){
-         this.diaRetiros.add(new DiaRetiro(1, diaSemana, horaDesde, horaHasta, intervalo));
-         return true;
+    public boolean agregarItemCarrito (ItemCarrito itemCarrito){
+        int i = 0;
+        ItemCarrito itemCarritoAux = traerItemCarrito(itemCarrito.getArticulo().getId());
+        if(itemCarritoAux == null){
+            this.itemCarrito.add(itemCarrito);
+        }else{
+            itemCarritoAux.setCantidad(itemCarritoAux.getCantidad() + itemCarrito.getCantidad());
+        }
+        return true;
     }
+    public boolean removerItemCarrito(ItemCarrito itemCarrito){
+        itemCarrito = traerItemCarrito(itemCarrito.getArticulo().getId());
+        boolean resultado = false;
+        if(itemCarrito != null){
+            this.itemCarrito.remove(itemCarrito);
+            resultado = true;
+        }
+        return resultado;
+    }
+
+    private ItemCarrito traerItemCarrito (int id){
+        int i = 0;
+        ItemCarrito itemCarrito = null;
+        while (i< this.itemCarrito.size() && itemCarrito == null ) {
+            ItemCarrito itemCarritoAux = this.itemCarrito.get(i);
+            if(itemCarritoAux.getArticulo().getId() == id) {
+                itemCarrito = this.itemCarrito.get(i);
+            }
+            i++;
+        }
+        return itemCarrito;
+    }
+
+
 }
 

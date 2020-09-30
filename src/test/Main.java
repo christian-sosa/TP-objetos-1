@@ -53,9 +53,10 @@ public class Main {
 
 
         //Agregamos items al carrito
-        Articulo articulo = new Articulo(1, "Articulo", "CodBarras", 12.3);
-        ItemCarrito itemcarrito = new ItemCarrito(articulo,2);
-        carrito.getItemCarrito().add(itemcarrito);
+        Articulo articuloA = new Articulo(1, "ArticuloA", "CodBarrasA", 12.3);
+        Articulo articuloB = new Articulo(2, "ArticuloB", "CodBarrasB", 23.3);
+        carrito.getItemCarrito().add(new ItemCarrito(articuloA,2));
+        carrito.getItemCarrito().add(new ItemCarrito(articuloB,2));
         System.out.println(carrito.toString());
 
         // Instancio una ubicacion y la traigo con traerUbicacion
@@ -74,7 +75,11 @@ public class Main {
         System.out.println(carrito.totalAPagarCarrito());
 
 
+        System.out.println("Carrito ---->" + carrito.getItemCarrito());
+        carrito.agregarItemCarrito(new ItemCarrito(articuloA,2));
 
-        Scanner in = new Scanner(System.in);
+        System.out.println("Carrito ---->" + carrito.getItemCarrito());
+        carrito.removerItemCarrito(new ItemCarrito(articuloA,2));
+        System.out.println("Carrito ---->" + carrito.getItemCarrito());
     }
 }

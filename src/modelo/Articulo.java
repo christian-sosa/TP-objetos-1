@@ -9,8 +9,11 @@ public class Articulo {
     public Articulo(int id, String nombre, String codBarras, double precio) {
         this.id = id;
         this.nombre = nombre;
-        this.codBarras = codBarras;
+        setCodBarras(codBarras);
         this.precio = precio;
+    }
+
+    public Articulo() {
     }
 
     public int getId() {
@@ -30,7 +33,11 @@ public class Articulo {
     }
 
     public void setCodBarras(String codBarras) {
-        this.codBarras = codBarras;
+        if(validarCodigo(codBarras)) {
+            this.codBarras = codBarras;
+        }else{
+            throw new RuntimeException("Codigo de barras no valido");
+        }
     }
 
     public void setPrecio(double precio) {
@@ -45,6 +52,7 @@ public class Articulo {
         return precio;
     }
 
+
     @Override
     public String toString() {
         return "Articulo{" +
@@ -54,4 +62,17 @@ public class Articulo {
                 ", precio=" + precio +
                 '}';
     }
+
+    public boolean validarCodigo (String codigo){
+        boolean valido = false;
+        if(codigo.length() == 13){
+           valido = codigo.charAt(0) == '7'
+                && codigo.charAt(1) == '7'
+                && codigo.charAt(2) == '9'
+                && codigo.charAt(12) == '3';
+        }
+        return valido;
+    }
+
+
 }

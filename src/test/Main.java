@@ -2,28 +2,12 @@ package test;
 
 import modelo.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("\n" +
-                " â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„            â–„â–„       â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„        â–„       â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„        â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„  â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„ \n" +
-                "â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–‘â–Œ     â–�â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–Œ      â–�â–‘â–Œ     â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–Œ      â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ\n" +
-                "â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œâ–‘â–Œ   â–�â–‘â–�â–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–Œâ–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–Œâ–‘â–Œ     â–�â–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œ â–€â–€â–€â–€â–ˆâ–‘â–ˆâ–€â–€â–€â–€ â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ \n" +
-                "â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œâ–�â–‘â–Œ â–�â–‘â–Œâ–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œâ–�â–‘â–Œ    â–�â–‘â–Œ     â–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œâ–�â–‘â–Œ    â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–Œ          \n" +
-                "â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ â–�â–‘â–�â–‘â–Œ â–�â–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–Œ â–�â–‘â–Œ   â–�â–‘â–Œ     â–�â–‘â–Œ â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–Œ â–�â–‘â–Œ   â–�â–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ \n" +
-                "â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ  â–�â–‘â–Œ  â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ  â–�â–‘â–Œ  â–�â–‘â–Œ     â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ  â–�â–‘â–Œ  â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ\n" +
-                "â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ   â–€   â–�â–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ â–�â–‘â–Œ   â–�â–‘â–Œ â–�â–‘â–Œ     â–�â–‘â–Œ â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–ˆâ–‘â–ˆâ–€â–€ â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œâ–�â–‘â–Œ   â–�â–‘â–Œ â–�â–‘â–Œâ–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–ˆâ–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–ˆâ–€â–€â–€â–€â–€â–€â–€â–€â–€ \n" +
-                "â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ          â–�â–‘â–Œ          â–�â–‘â–Œ    â–�â–‘â–Œâ–�â–‘â–Œ     â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ     â–�â–‘â–Œ  â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ    â–�â–‘â–Œâ–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–Œ          \n" +
-                "â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ â–�â–‘â–Œ     â–�â–‘â–�â–‘â–Œ     â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–ˆâ–‘â–Œâ–�â–‘â–Œ      â–�â–‘â–Œ â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ     â–�â–‘â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„ \n" +
-                "â–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ      â–�â–‘â–‘â–Œ     â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œâ–�â–‘â–Œ      â–�â–‘â–‘â–Œâ–�â–‘â–Œ       â–�â–‘â–Œ     â–�â–‘â–Œ     â–�â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œ\n" +
-                " â–€         â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€         â–€  â–€         â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€        â–€â–€       â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€  â–€         â–€  â–€         â–€  â–€        â–€â–€  â–€         â–€       â–€       â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€â–€ \n" +
-                "                                                                                                                                                                                           \n");
         //Instanciamos lo necesario para un cliente
         Ubicacion ubicacionCliente = new Ubicacion(100, 100);
         Contacto contactoCliente = new Contacto("cliente@mail.com", "12341234", ubicacionCliente);
@@ -32,54 +16,19 @@ public class Main {
         //Instanciamos lo necesario para un comercio
         Ubicacion ubicacionComercio = new Ubicacion(50, 50);
         Contacto contactoComercio = new Contacto("Comercio@mail.com", "12341234", ubicacionComercio);
-        DiaRetiro diaRetiro1 = new DiaRetiro(1, 2, LocalTime.of(9, 30),
-                LocalTime.of(18, 0), 30);
-        DiaRetiro diaRetiro2 = new DiaRetiro(1, 3, LocalTime.of(9, 30),
-                LocalTime.of(18, 0), 30);
-
         Comercio comercio = new Comercio(1, contactoComercio, "Nombre Comercio", 999999999,
                 10, 10, 3, 10,
-                10, new ArrayList<>());
-        comercio.getDiaRetiros().add(diaRetiro1);
-        comercio.getDiaRetiros().add(diaRetiro2);
-        System.out.println(comercio.generarTurnos(LocalDate.now()));
-        // Instanciamos una entrega
-        Entrega entrega = new Entrega(1, LocalDate.now(), true);
+                10);
+        comercio.agregarArticulo(1, "ArticuloA", "7790000000003", 23);
+        comercio.agregarArticulo(2, "ArticuloB", "7790000000013", 23);
 
-        //Agregamos carrito al comercio
+        Carrito carrito=  comercio.generarCarrito(cliente, false).get(0);
 
-        Carrito carrito = new Carrito(1, LocalDate.now(), LocalTime.now(),
-                false, 10, cliente, new ArrayList<>(), entrega, new ArrayList<>());
+        carrito.agregarItemCarrito(comercio.traerArticulo(1),1);
+        carrito.agregarItemCarrito(comercio.traerArticulo(2),2);
+        carrito.agregarItemCarrito(comercio.traerArticulo(2),2);
 
+        System.out.println(carrito);
 
-        //Agregamos items al carrito
-        Articulo articuloA = new Articulo(1, "ArticuloA", "CodBarrasA", 12.3);
-        Articulo articuloB = new Articulo(2, "ArticuloB", "CodBarrasB", 23.3);
-        carrito.getItemCarrito().add(new ItemCarrito(articuloA,2));
-        carrito.getItemCarrito().add(new ItemCarrito(articuloB,2));
-        System.out.println(carrito.toString());
-
-        // Instancio una ubicacion y la traigo con traerUbicacion
-        Ubicacion MiCasa  = new Ubicacion(2.4,7.5);
-        System.out.println(" mi casa esta en  " + MiCasa.traerUbicacion());
-        
-        //Calcular totalCarrito
-        System.out.println(carrito.calcularTotalCarrito());
-
-        //calcular descuento efectivo
-        System.out.println(carrito.calcularDescuentoEfectivo(comercio.getPorcentajeDescuentoEfectivo()));
-
-        //calcular descuento dia
-        System.out.println(carrito.calcularDescuentoDia(1, comercio.getPorcentajeDescuentoDia()));
-        //total a pagar
-        System.out.println(carrito.totalAPagarCarrito());
-
-
-        System.out.println("Carrito ---->" + carrito.getItemCarrito());
-        carrito.agregarItemCarrito(new ItemCarrito(articuloA,2));
-
-        System.out.println("Carrito ---->" + carrito.getItemCarrito());
-        carrito.removerItemCarrito(new ItemCarrito(articuloA,2));
-        System.out.println("Carrito ---->" + carrito.getItemCarrito());
     }
 }

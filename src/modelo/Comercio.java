@@ -15,10 +15,12 @@ public class Comercio extends Actor {
     private int porcentajeDescuentoDia;
     private int porcentajeDescuentoEfectivo;
     List<DiaRetiro> diaRetiros;
+    List<Carrito> carritos;
+    List<Articulo> articulos;
 
     public Comercio(int id, Contacto contacto, String nombreComercio, long cuit, double costoFijo,
-                    double costoPorKm, int diaDescuento, int porcentajeDescuentoDia, int porcentajeDescuentoEfectivo,
-                    List<DiaRetiro> diaRetiros) {
+                    double costoPorKm, int diaDescuento, int porcentajeDescuentoDia, int porcentajeDescuentoEfectivo
+                    ) {
         super(id, contacto);
         this.nombreComercio = nombreComercio;
         this.cuit = cuit;
@@ -27,7 +29,9 @@ public class Comercio extends Actor {
         this.diaDescuento = diaDescuento;
         this.porcentajeDescuentoDia = porcentajeDescuentoDia;
         this.porcentajeDescuentoEfectivo = porcentajeDescuentoEfectivo;
-        this.diaRetiros = diaRetiros;
+        this.diaRetiros = new ArrayList<>();
+        this.carritos = new ArrayList<>();
+        this.articulos = new ArrayList<>();
     }
 
     public String getNombreComercio() {
@@ -86,6 +90,22 @@ public class Comercio extends Actor {
         this.porcentajeDescuentoEfectivo = porcentajeDescuentoEfectivo;
     }
 
+    public List<Carrito> getCarritos() {
+        return carritos;
+    }
+
+    public void setCarritos(List<Carrito> carritos) {
+        this.carritos = carritos;
+    }
+
+    public List<Articulo> getArticulos() {
+        return articulos;
+    }
+
+    public void setArticulos(List<Articulo> articulos) {
+        this.articulos = articulos;
+    }
+
     public List<DiaRetiro> getDiaRetiros() {
         return diaRetiros;
     }
@@ -137,5 +157,64 @@ public class Comercio extends Actor {
         }
         return diaRetiro;
     }
+
+    public List<Carrito> generarCarrito (Cliente cliente, boolean estado){
+        List<Carrito> carritos = new ArrayList<>();
+        boolean carritoAbiertoEncontrado = false ;
+        int i = this.carritos.size();
+        while(carritoAbiertoEncontrado == false && i > 0  ) {
+            Carrito carrito = this.carritos.get(i);
+            if(carrito.getCliente().equals(cliente) && carrito.isCerrado() == estado){
+                carritos.add(this.carritos.get(i));
+                if (estado == false){
+                    carritoAbiertoEncontrado = true;
+                }
+            }
+        }
+        if(carritos.size() == 0 && !estado){
+            carritos.add(new Carrito(generarId(), LocalDate.now(), LocalTime.now(), false, 12, cliente,
+                    new Entrega(1, LocalDate.now(), true )));
+        }
+        return carritos;
+    }
+
+    public boolean agregarArticulo(int id, String nombre, String codBarras, double precio) {
+        boolean resultado = false;
+        Articulo articulo = new Articulo (id, nombre, codBarras, precio);
+        int i = 0;
+        while (i < this.articulos.size()) {
+            if (this.articulos.get(i).getCodBarras().equals(codBarras)) {
+                throw new RuntimeException("Ya existe un item con ese codigo de barras");
+            }
+            i++;
+        }
+        this.articulos.add(articulo);
+        return resultado;
+    }
+
+    public Articulo traerArticulo (int id){
+        Articulo articulo = null;
+        int i  = 0;
+        while (i < this.articulos.size() && articulo == null){
+            if(this.articulos.get(i).getId() == id){
+                articulo = this.articulos.get(i);
+            }
+            i++;
+        }
+        return articulo;
+    }
+
+
+
+    private int generarId(){
+        int id = 1;
+        for (Carrito carrito : this.carritos) {
+            if (carrito.getIdCarrito() > id){
+                id = carrito.getIdCarrito();
+            }
+        }
+        return  id;
+    }
+
 
 }

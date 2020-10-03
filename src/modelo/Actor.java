@@ -18,13 +18,11 @@ public abstract class Actor {
         this.id = id;
     }
 
-	@Override
-	public String toString() {
-		return "Actor [id=" + id + ", contacto=" + contacto + "]";
-	}
-
-	protected boolean validarIdentificadorUnico(int identificador) {
-        String s = Long.toString(identificador);
-        return s.length()>8 || s.length()>11;
+    @Override
+    public String toString() {
+        return "Actor [id=" + id + ", contacto=" + contacto + "]";
     }
+
+    protected abstract boolean validarIdentificadorUnico(long identificador);
+
 }

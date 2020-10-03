@@ -48,9 +48,9 @@ public class Envio {
         this.ubicacion = ubicacion;
     }
 
-	@Override
-	public String toString() {
-		return "Envio [horaHasta=" + horaHasta + ", horaDesde=" + horaDesde + ", costo=" + costo + ", ubicacion="
-				+ ubicacion + "]";
-	}
+    @Override
+    public String toString() {
+        return "Envio [horaHasta=" + horaHasta + ", horaDesde=" + horaDesde + ", costo=" + costo + ", ubicacion="
+                + ubicacion + "]";
+    }
 }

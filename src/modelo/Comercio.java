@@ -20,13 +20,13 @@ public class Comercio extends Actor {
 
     public Comercio(int id, Contacto contacto, String nombreComercio, long cuit, double costoFijo,
                     double costoPorKm, int diaDescuento, int porcentajeDescuentoDia, int porcentajeDescuentoEfectivo
-                    ) {
+    )throws RuntimeException {
         super(id, contacto);
         this.nombreComercio = nombreComercio;
-        this.cuit = cuit;
+        setCuit(cuit);
         this.costoFijo = costoFijo;
         this.costoPorKm = costoPorKm;
-        this.diaDescuento = diaDescuento;
+        setDiaDescuento(diaDescuento);
         this.porcentajeDescuentoDia = porcentajeDescuentoDia;
         this.porcentajeDescuentoEfectivo = porcentajeDescuentoEfectivo;
         this.diaRetiros = new ArrayList<>();
@@ -46,8 +46,13 @@ public class Comercio extends Actor {
         return cuit;
     }
 
-    public void setCuit(long cuit) {
-        this.cuit = cuit;
+    public void setCuit(long cuit) throws RuntimeException {
+        if (validarIdentificadorUnico(cuit)) {
+            this.cuit = cuit;
+        }else{
+            throw new RuntimeException("CUIT invalido");
+        }
+
     }
 
     public double getCostoFijo() {
@@ -71,7 +76,11 @@ public class Comercio extends Actor {
     }
 
     public void setDiaDescuento(int diaDescuento) {
-        this.diaDescuento = diaDescuento;
+        if (diaDescuento > 0 && diaDescuento < 8 ) {
+            this.diaDescuento = diaDescuento;
+        }else {
+            throw new RuntimeException("El numero de dia de descuento tiene q ser entre 1 y 7");
+        }
     }
 
     public int getPorcentajeDescuentoDia() {
@@ -128,59 +137,40 @@ public class Comercio extends Actor {
                 '}';
     }
 
-    public List<Turno> generarTurnos (LocalDate fecha){
+    public List<Turno> generarTurnos(LocalDate fecha) {
         List<Turno> listaTurnos = new ArrayList<>();
         DiaRetiro diaRetiro = this.obtenerDiaRetiro(fecha);
         LocalTime horaDesde = diaRetiro.getHoraDesde();
         LocalTime horaHasta = diaRetiro.getHoraHasta();
 
-        while(horaDesde.isBefore(horaHasta)){
+        while (horaDesde.isBefore(horaHasta)) {
             listaTurnos.add(new Turno(fecha, horaDesde, false));
             horaDesde = horaDesde.plusMinutes(diaRetiro.getIntervalo());
         }
-        return  listaTurnos;
+        return listaTurnos;
     }
 
-    private DiaRetiro obtenerDiaRetiro(LocalDate fecha){
+    private DiaRetiro obtenerDiaRetiro(LocalDate fecha) {
         DiaRetiro diaRetiro = null;
-        boolean encontrado  = false;
+        boolean encontrado = false;
         int i = 0;
-        while (encontrado == false && i< this.diaRetiros.size()) {
-            if(this.diaRetiros.get(i).getDiaSemana() == fecha.getDayOfWeek().getValue()){
+        while (encontrado == false && i < this.diaRetiros.size()) {
+            if (this.diaRetiros.get(i).getDiaSemana() == fecha.getDayOfWeek().getValue()) {
                 diaRetiro = this.diaRetiros.get(i);
                 encontrado = true;
             }
             i++;
         }
-        if (diaRetiro == null){
+        if (diaRetiro == null) {
             throw new RuntimeException("No se encuentra dia de retiro con ese numero de dia de semana");
         }
         return diaRetiro;
     }
 
-    public List<Carrito> generarCarrito (Cliente cliente, boolean estado){
-        List<Carrito> carritos = new ArrayList<>();
-        boolean carritoAbiertoEncontrado = false ;
-        int i = this.carritos.size();
-        while(carritoAbiertoEncontrado == false && i > 0  ) {
-            Carrito carrito = this.carritos.get(i);
-            if(carrito.getCliente().equals(cliente) && carrito.isCerrado() == estado){
-                carritos.add(this.carritos.get(i));
-                if (estado == false){
-                    carritoAbiertoEncontrado = true;
-                }
-            }
-        }
-        if(carritos.size() == 0 && !estado){
-            carritos.add(new Carrito(generarId(), LocalDate.now(), LocalTime.now(), false, 12, cliente,
-                    new Entrega(1, LocalDate.now(), true )));
-        }
-        return carritos;
-    }
 
     public boolean agregarArticulo(int id, String nombre, String codBarras, double precio) {
         boolean resultado = false;
-        Articulo articulo = new Articulo (id, nombre, codBarras, precio);
+        Articulo articulo = new Articulo(id, nombre, codBarras, precio);
         int i = 0;
         while (i < this.articulos.size()) {
             if (this.articulos.get(i).getCodBarras().equals(codBarras)) {
@@ -192,11 +182,12 @@ public class Comercio extends Actor {
         return resultado;
     }
 
-    public Articulo traerArticulo (int id){
+
+    public Articulo traerArticulo(int id) {
         Articulo articulo = null;
-        int i  = 0;
-        while (i < this.articulos.size() && articulo == null){
-            if(this.articulos.get(i).getId() == id){
+        int i = 0;
+        while (i < this.articulos.size() && articulo == null) {
+            if (this.articulos.get(i).getId() == id) {
                 articulo = this.articulos.get(i);
             }
             i++;
@@ -204,17 +195,88 @@ public class Comercio extends Actor {
         return articulo;
     }
 
+    public boolean agregarCarrito(Cliente cliente) {
+        boolean resultado = false;
 
-
-    private int generarId(){
-        int id = 1;
-        for (Carrito carrito : this.carritos) {
-            if (carrito.getIdCarrito() > id){
-                id = carrito.getIdCarrito();
-            }
+        if (this.traerCarrito(cliente.getId(), false).size() == 0) {
+            this.carritos.add(new Carrito(generarId(), LocalDate.now(), LocalTime.now(), false, cliente));
+            resultado = true;
         }
-        return  id;
+        return resultado;
     }
 
+    public List<Carrito> traerCarrito(int idCliente, boolean isCerrado) {
+        List<Carrito> carrito = new ArrayList<>();
+        boolean carritoAbiertoEncontrado = false;
+        int i = this.carritos.size() - 1;
+        while (i >= 0 && carritoAbiertoEncontrado == false) {
+            Carrito carritoAux = this.getCarritos().get(i);
+            if (carritoAux.getCliente().getId() == idCliente && carritoAux.isCerrado() == isCerrado) {
+                carrito.add(carritoAux);
+                if (!carritoAux.isCerrado()) {
+                    carritoAbiertoEncontrado = true;
+                }
+            }
+            i--;
+        }
+        return carrito;
+    }
 
+    private int generarId() {
+        int id = 1;
+        if (!this.carritos.isEmpty()) {
+            int max = 0;
+            for (Carrito carrito : this.carritos) {
+                if (carrito.getIdCarrito() > max) {
+                    max = carrito.getIdCarrito();
+                    id = carrito.getIdCarrito() + 1;
+                }
+            }
+        }
+        return id;
+    }
+
+    @Override
+    protected boolean validarIdentificadorUnico(long identificador) {
+        boolean valido = false;
+        String cuit = Long.toString(identificador);
+        if(cuit.length() != 11){
+            throw new RuntimeException("La longitud del cuit es erronea");
+        }
+        int acum = 0;
+        int[] multiplicadores = {5, 4 ,3, 2, 7, 6, 5, 4, 3, 2};
+        char[] arrayCuit = cuit.toCharArray();
+        int verificador = Character.getNumericValue(arrayCuit[10]);
+        for (int i = 0; i< 10; i ++){
+            acum += Character.getNumericValue(arrayCuit[i]) * multiplicadores[i];
+        }
+        acum = 11 - (acum % 11);
+        if(acum == 11){
+            if(verificador == 0){
+                valido = true;
+            }
+        }else if (acum == 10) {
+            if(verificador == 9){
+                valido = true;
+            }
+        }else {
+            if(verificador == acum){
+                valido = true;
+            }
+        }
+
+        return valido;
+    }
+
+    public Double finalizarCompra(Cliente cliente)throws RuntimeException {
+        List<Carrito> carritos = this.traerCarrito(cliente.getId(), false);
+        if(carritos.isEmpty()){
+            throw new RuntimeException("No se detectan carritos abiertos para ese cliente");
+        }
+        Carrito carrito = carritos.get(0);
+        double total = carrito.calcularTotalCarrito() - carrito.calcularDescuentoCarrito(this.diaDescuento,
+                this.porcentajeDescuentoDia, this.porcentajeDescuentoEfectivo);
+        carrito.setCerrado(true);
+        return total;
+    }
 }

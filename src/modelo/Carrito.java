@@ -1,5 +1,6 @@
 package modelo;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,22 +16,14 @@ public class Carrito {
     private List<ItemCarrito> itemCarritos;
     private Entrega entrega;
 
-
-    public Carrito() {
-    }
-
-    public Carrito(int idCarrito, LocalDate fecha, LocalTime hora, boolean cerrado, double descuento, Cliente cliente,
-                             Entrega entrega) {
+    public Carrito(int idCarrito, LocalDate fecha, LocalTime hora, boolean cerrado, Cliente cliente) {
         this.idCarrito = idCarrito;
         this.fecha = fecha;
         this.hora = hora;
         this.cerrado = cerrado;
-        this.descuento = descuento;
         this.cliente = cliente;
         this.itemCarritos = new ArrayList<>();
-        this.entrega = entrega;
     }
-
 
     public int getIdCarrito() {
         return idCarrito;
@@ -95,74 +88,68 @@ public class Carrito {
     public void setEntrega(Entrega entrega) {
         this.entrega = entrega;
     }
+
     @Override
-	public String toString() {
-		return "Carrito [idCarrito=" + idCarrito + ", fecha=" + fecha + ", hora=" + hora + ", cerrado=" + cerrado
-				+ ", descuento=" + descuento + ", cliente=" + cliente + ", itemCarrito=" + itemCarritos + ", entrega="
-				+ entrega + "]";
-	}
+    public String toString() {
+        return "Carrito [idCarrito=" + idCarrito + ", fecha=" + fecha + ", hora=" + hora + ", cerrado=" + cerrado
+                + ", descuento=" + descuento + ", cliente=" + cliente + ", itemCarrito=" + itemCarritos + ", entrega="
+                + entrega + "]";
+    }
 
     public double calcularTotalCarrito() {
-    	double total=0;
-    	for(int i = 0; i<this.getItemCarritos().size(); i++) {
-    		total += itemCarritos.get(i).getCantidad()* itemCarritos.get(i).getArticulo().getPrecio();
-    	}
-    	return total;
-    }
-    public double calcularDescuentoEfectivo(double porcentajeDescuentoEfectivo){
-    return calcularTotalCarrito()*porcentajeDescuentoEfectivo/100;
-    }
-    public double calcularDescuentoDia(int diaDescuento, double porcentajeDescuentoDia){
-        LocalDate numeroDiaDescuento = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), diaDescuento);
-        double descuento = 0;
-        if(numeroDiaDescuento.compareTo(LocalDate.now()) == 0 ){
-             for (ItemCarrito itemCarrito: this.itemCarritos) {
-
-             }
-         }
-        return  descuento;
-    }
-    public double calcularDescuentoCarrito(int diaDescuento, double porcentajeDescuento, double porcentajeDescuentoEfectivo) {
-    	double descuento;
-
-    	LocalDate localDate = LocalDate.now();
-
-    	if(localDate.getDayOfWeek().getValue() == diaDescuento) {
-    	   if(porcentajeDescuento>porcentajeDescuentoEfectivo) {
-    		   descuento=porcentajeDescuento;
-    	   }
-    	   else {
-    		   descuento=porcentajeDescuentoEfectivo;
-    	   }  		 
+        double total = 0;
+        for (ItemCarrito itemCarrito : this.itemCarritos) {
+            total += itemCarrito.calcularSubtotal();
         }
-        else {
-        	descuento=porcentajeDescuentoEfectivo;
-        }
-        return descuento;      			
-    }
-    public double totalAPagarCarrito(LocalDate diaDeCompra){
-    	double total = this.calcularTotalCarrito();
-    	//double descuento = calcularDescuentoCarrito();
-    	return total-descuento;
+
+        return total;
     }
 
-    public boolean agregarItemCarrito (Articulo articulo, int cantidad){
+    public double calcularDescuentoEfectivo(double porcentajeDescuentoEfectivo) {
+        return calcularTotalCarrito() * porcentajeDescuentoEfectivo / 100;
+    }
+
+    public double calcularDescuentoDia(double porcentajeDescuentoDia) {
+        Double descuento = 0d;
+        for (ItemCarrito item : this.itemCarritos) {
+            descuento += ((item.getCantidad() / 2) * item.getArticulo().getPrecio() * porcentajeDescuentoDia / 100);
+        }
+
+        return descuento;
+    }
+
+    public double calcularDescuentoCarrito(int diaDescuento, double porcentajeDescuentoDia, double porcentajeDescuentoEfectivo) {
+        Double descuentoDia = 0d;
+        Double descuentoEfectivo = 0d;
+
+        if (diaDescuento == LocalDate.now().getDayOfWeek().getValue()) {
+            descuentoDia = this.calcularDescuentoDia(porcentajeDescuentoDia);
+        }
+        if (this.getEntrega().isEfectivo()) {
+            descuentoEfectivo = this.calcularDescuentoEfectivo(porcentajeDescuentoEfectivo);
+        }
+
+        return descuentoDia > descuentoEfectivo ? descuentoDia : descuentoEfectivo;
+    }
+
+    public boolean agregarItemCarrito(Articulo articulo, int cantidad) {
         int i = 0;
         ItemCarrito itemCarritoAux = traerItemCarrito(articulo.getId());
-        if(itemCarritoAux == null){
+        if (itemCarritoAux == null) {
             this.itemCarritos.add(new ItemCarrito(articulo, cantidad));
-        }else{
+        } else {
             itemCarritoAux.setCantidad(itemCarritoAux.getCantidad() + cantidad);
         }
         return true;
     }
-    public boolean removerItemCarrito(Articulo articulo, int cantidad){
+
+    public boolean removerItemCarrito(Articulo articulo, int cantidad) {
         ItemCarrito itemCarritoAux = traerItemCarrito(articulo.getId());
         boolean remover = false;
-        if(cantidad >= itemCarritoAux.getCantidad()){
-             remover = this.itemCarritos.remove(itemCarritoAux);
-        }else {
-            itemCarritoAux.setCantidad(itemCarritoAux.getCantidad() -cantidad);
+        if (cantidad >= itemCarritoAux.getCantidad()) {
+            remover = this.itemCarritos.remove(itemCarritoAux);
+        } else {
+            itemCarritoAux.setCantidad(itemCarritoAux.getCantidad() - cantidad);
             remover = true;
         }
 
@@ -170,11 +157,11 @@ public class Carrito {
 
     }
 
-    private ItemCarrito traerItemCarrito (int id){
+    private ItemCarrito traerItemCarrito(int id) {
         int i = 0;
         ItemCarrito itemCarrito = null;
-        while (i< this.itemCarritos.size() && itemCarrito == null ) {
-            if( this.itemCarritos.get(i).getArticulo().getId() == id) {
+        while (i < this.itemCarritos.size() && itemCarrito == null) {
+            if (this.itemCarritos.get(i).getArticulo().getId() == id) {
                 itemCarrito = this.itemCarritos.get(i);
             }
             i++;

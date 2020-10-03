@@ -10,6 +10,10 @@ public class ItemCarrito {
         this.cantidad = cantidad;
     }
 
+    public double calcularSubtotal() {
+        return this.articulo.getPrecio() * this.cantidad;
+    }
+
     public Articulo getArticulo() {
         return articulo;
     }
@@ -25,6 +29,7 @@ public class ItemCarrito {
     public void setid(int cantidad) {
         this.cantidad = cantidad;
     }
+
     public int getid() {
         return cantidad;
     }
@@ -33,8 +38,8 @@ public class ItemCarrito {
         this.cantidad = cantidad;
     }
 
-	@Override
-	public String toString() {
-		return "ItemCarrito [articulo=" + articulo + ", cantidad=" + cantidad + "]";
-	}
+    @Override
+    public String toString() {
+        return "ItemCarrito [articulo=" + articulo + ", cantidad=" + cantidad + "]";
+    }
 }

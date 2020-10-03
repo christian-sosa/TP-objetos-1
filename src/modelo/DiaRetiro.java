@@ -58,7 +58,6 @@ public class DiaRetiro {
     }
 
 
-
     @Override
     public String toString() {
         return "DiaRetiro{" +

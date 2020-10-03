@@ -33,9 +33,9 @@ public class Articulo {
     }
 
     public void setCodBarras(String codBarras) {
-        if(validarCodigo(codBarras)) {
+        if (validarCodigo(codBarras)) {
             this.codBarras = codBarras;
-        }else{
+        } else {
             throw new RuntimeException("Codigo de barras no valido");
         }
     }
@@ -63,13 +63,13 @@ public class Articulo {
                 '}';
     }
 
-    public boolean validarCodigo (String codigo){
+    public boolean validarCodigo(String codigo) {
         boolean valido = false;
-        if(codigo.length() == 13){
-           valido = codigo.charAt(0) == '7'
-                && codigo.charAt(1) == '7'
-                && codigo.charAt(2) == '9'
-                && codigo.charAt(12) == '3';
+        if (codigo.length() == 13) {
+            valido = codigo.charAt(0) == '7'
+                    && codigo.charAt(1) == '7'
+                    && codigo.charAt(2) == '9'
+                    && codigo.charAt(12) == '3';
         }
         return valido;
     }

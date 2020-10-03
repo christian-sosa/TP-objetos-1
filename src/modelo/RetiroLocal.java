@@ -17,12 +17,12 @@ public class RetiroLocal {
 
     //Segun el Date que le pases es la hora que devuelve
 
-    public LocalTime traerHoraRetiro(LocalDate fecha){
-    return getHoraEntrega();
+    public LocalTime traerHoraRetiro(LocalDate fecha) {
+        return getHoraEntrega();
     }
 
-	@Override
-	public String toString() {
-		return "RetiroLocal [horaEntrega=" + horaEntrega + "]";
-	}
+    @Override
+    public String toString() {
+        return "RetiroLocal [horaEntrega=" + horaEntrega + "]";
+    }
 }

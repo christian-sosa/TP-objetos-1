@@ -9,7 +9,7 @@ public class Cliente extends Actor {
         super(id, contacto);
         this.apellido = apellido;
         this.nombre = nombre;
-        this.dni = dni;
+        setDni(dni);
     }
 
     public String getApellido() {
@@ -33,15 +33,20 @@ public class Cliente extends Actor {
     }
 
     public void setDni(int dni) {
-        this.dni = dni;
-
+        if (validarIdentificadorUnico(dni)) {
+            this.dni = dni;
+        } else {
+            throw new RuntimeException("El dni es invalido");
+        }
     }
 
+    @Override
+    protected boolean validarIdentificadorUnico(long identificador) {
+        return (identificador > 1000000 && identificador < 99999999);
+    }
 
-
-
-	@Override
-	public String toString() {
-		return "Cliente [apellido=" + apellido + ", nombre=" + nombre + ", dni=" + dni + "]";
-	}
+    @Override
+    public String toString() {
+        return "Cliente [apellido=" + apellido + ", nombre=" + nombre + ", dni=" + dni + "]";
+    }
 }

@@ -39,8 +39,8 @@ public class Turno {
         this.ocupado = ocupado;
     }
 
-	@Override
-	public String toString() {
-		return "Turno [dia=" + dia + ", hora=" + hora + ", ocupado=" + ocupado + "]";
-	}
+    @Override
+    public String toString() {
+        return "Turno [dia=" + dia + ", hora=" + hora + ", ocupado=" + ocupado + "]";
+    }
 }

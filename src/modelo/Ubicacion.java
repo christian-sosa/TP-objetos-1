@@ -26,16 +26,16 @@ public class Ubicacion {
     }
 
     //preguntar por que devolver un Ubicacion
-    public Ubicacion traerUbicacion(){
+    public Ubicacion traerUbicacion() {
 
         //return new Ubicacion (latitud,longitud);
         return this;
     }
 
-	@Override
-	public String toString() {
-		return "Ubicacion [latitud=" + latitud + ", longitud=" + longitud + "]";
-	}
+    @Override
+    public String toString() {
+        return "Ubicacion [latitud=" + latitud + ", longitud=" + longitud + "]";
+    }
 }
 
 

@@ -6,7 +6,7 @@ public class Articulo {
     private String codBarras;
     private double precio;
 
-    public Articulo(int id, String nombre, String codBarras, double precio) {
+    public Articulo(int id, String nombre, String codBarras, double precio) throws  RuntimeException{
         this.id = id;
         this.nombre = nombre;
         setCodBarras(codBarras);
@@ -32,7 +32,7 @@ public class Articulo {
         this.nombre = nombre;
     }
 
-    public void setCodBarras(String codBarras) {
+    public void setCodBarras(String codBarras)throws RuntimeException {
         if (validarCodigo(codBarras)) {
             this.codBarras = codBarras;
         } else {

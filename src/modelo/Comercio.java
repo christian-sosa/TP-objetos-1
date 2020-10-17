@@ -17,6 +17,15 @@ public class Comercio extends Actor {
     List<DiaRetiro> diaRetiros;
     List<Carrito> carritos;
     List<Articulo> articulos;
+    /*Ignacio Oliveto:
+           A mi entender toda la logica de turnos deberia ser por comercio, si esto deberia escalar y admitir mas comercios
+           lo logico es q los comercios tengan una lista de turnos q puedan estar libres u ocupados y cuando se va a
+           generar un retiro verifique si el comercio tiene turnos disponibles para retiro en ese horario.
+           Ademas de esto, el encapsulamiento de las funcionalidades seria mas claro y los metodos de la clase podrian usar
+           la lista de la instancia del comercio para minimizar la cantidad de parametros.
+           La idea de tener q recorrer  carritos para generar turnos libres u ocupados me parecio muy poco eficiente.
+   */
+    List<Turno> turnos;
 
     public Comercio(int id, Contacto contacto, String nombreComercio, long cuit, double costoFijo,
                     double costoPorKm, int diaDescuento, int porcentajeDescuentoDia, int porcentajeDescuentoEfectivo
@@ -32,18 +41,7 @@ public class Comercio extends Actor {
         this.diaRetiros = new ArrayList<>();
         this.carritos = new ArrayList<>();
         this.articulos = new ArrayList<>();
-    }
-
-    public String getNombreComercio() {
-        return nombreComercio;
-    }
-
-    public void setNombreComercio(String nombreComercio) {
-        this.nombreComercio = nombreComercio;
-    }
-
-    public long getCuit() {
-        return cuit;
+        this.turnos = new ArrayList<>();
     }
 
     public void setCuit(long cuit) throws RuntimeException {
@@ -55,25 +53,6 @@ public class Comercio extends Actor {
 
     }
 
-    public double getCostoFijo() {
-        return costoFijo;
-    }
-
-    public void setCostoFijo(double costoFijo) {
-        this.costoFijo = costoFijo;
-    }
-
-    public double getCostoPorKm() {
-        return costoPorKm;
-    }
-
-    public void setCostoPorKm(double costoPorKm) {
-        this.costoPorKm = costoPorKm;
-    }
-
-    public int getDiaDescuento() {
-        return diaDescuento;
-    }
 
     public void setDiaDescuento(int diaDescuento) {
         if (diaDescuento > 0 && diaDescuento < 8 ) {
@@ -83,44 +62,9 @@ public class Comercio extends Actor {
         }
     }
 
-    public int getPorcentajeDescuentoDia() {
-        return porcentajeDescuentoDia;
-    }
-
-    public void setPorcentajeDescuentoDia(int porcentajeDescuentoDia) {
-        this.porcentajeDescuentoDia = porcentajeDescuentoDia;
-    }
-
-    public int getPorcentajeDescuentoEfectivo() {
-        return porcentajeDescuentoEfectivo;
-    }
-
-    public void setPorcentajeDescuentoEfectivo(int porcentajeDescuentoEfectivo) {
-        this.porcentajeDescuentoEfectivo = porcentajeDescuentoEfectivo;
-    }
 
     public List<Carrito> getCarritos() {
         return carritos;
-    }
-
-    public void setCarritos(List<Carrito> carritos) {
-        this.carritos = carritos;
-    }
-
-    public List<Articulo> getArticulos() {
-        return articulos;
-    }
-
-    public void setArticulos(List<Articulo> articulos) {
-        this.articulos = articulos;
-    }
-
-    public List<DiaRetiro> getDiaRetiros() {
-        return diaRetiros;
-    }
-
-    public void setDiaRetiros(List<DiaRetiro> diaRetiros) {
-        this.diaRetiros = diaRetiros;
     }
 
     @Override
@@ -137,17 +81,17 @@ public class Comercio extends Actor {
                 '}';
     }
 
-    public List<Turno> generarTurnos(LocalDate fecha) {
-        List<Turno> listaTurnos = new ArrayList<>();
+    public boolean generarTurnos(LocalDate fecha) {
+
         DiaRetiro diaRetiro = this.obtenerDiaRetiro(fecha);
         LocalTime horaDesde = diaRetiro.getHoraDesde();
         LocalTime horaHasta = diaRetiro.getHoraHasta();
 
         while (horaDesde.isBefore(horaHasta)) {
-            listaTurnos.add(new Turno(fecha, horaDesde, false));
+            this.turnos.add(new Turno(fecha, horaDesde, false));
             horaDesde = horaDesde.plusMinutes(diaRetiro.getIntervalo());
         }
-        return listaTurnos;
+        return true;
     }
 
     private DiaRetiro obtenerDiaRetiro(LocalDate fecha) {
@@ -168,7 +112,7 @@ public class Comercio extends Actor {
     }
 
 
-    public boolean agregarArticulo(int id, String nombre, String codBarras, double precio) {
+    public boolean agregarArticulo(int id, String nombre, String codBarras, double precio) throws RuntimeException{
         boolean resultado = false;
         Articulo articulo = new Articulo(id, nombre, codBarras, precio);
         int i = 0;
@@ -183,7 +127,7 @@ public class Comercio extends Actor {
     }
 
 
-    public Articulo traerArticulo(int id) {
+    public Articulo traerArticulo(int id)throws RuntimeException {
         Articulo articulo = null;
         int i = 0;
         while (i < this.articulos.size() && articulo == null) {
@@ -192,14 +136,20 @@ public class Comercio extends Actor {
             }
             i++;
         }
+        if(articulo == null){
+            throw new RuntimeException("Articulo no existe");
+        }
         return articulo;
     }
 
+    /*Ignacio Oliveto:
+        LA idea era que al agregar un carrito si se encuentra otro carrito abierto para un cliente no agregue uno nuevo.
+     */
     public boolean agregarCarrito(Cliente cliente) {
         boolean resultado = false;
 
         if (this.traerCarrito(cliente.getId(), false).size() == 0) {
-            this.carritos.add(new Carrito(generarId(), LocalDate.now(), LocalTime.now(), false, cliente));
+            this.carritos.add(new Carrito(generarIdCarrito(), LocalDate.now(), LocalTime.now(), false, cliente));
             resultado = true;
         }
         return resultado;
@@ -222,7 +172,7 @@ public class Comercio extends Actor {
         return carrito;
     }
 
-    private int generarId() {
+    private int generarIdCarrito() {
         int id = 1;
         if (!this.carritos.isEmpty()) {
             int max = 0;
@@ -268,15 +218,124 @@ public class Comercio extends Actor {
         return valido;
     }
 
-    public Double finalizarCompra(Cliente cliente)throws RuntimeException {
+    //Ignacio Oliveto: La idea era q este metodo no solo pudiese crear dias de retiro sino remplazarlos para actualizarlos
+    public boolean agregarDiaRetiro (int diaSemana, LocalTime horaDesde, LocalTime horaHasta, int intervalo) throws RuntimeException{
+        DiaRetiro diaRetiro = traerDiaRetiro(diaSemana);
+        if(diaSemana > 7 || diaSemana < 0){
+            throw new RuntimeException("Dia de retiro tiene que tener un valor entre 1 y 7 inclusive");
+        }
+        if(diaRetiro != null ){
+            this.diaRetiros.remove(diaRetiro);
+        }
+        this.diaRetiros.add(new DiaRetiro(generarIdDiaRetiro(), diaSemana, horaDesde, horaHasta, intervalo));
+        return true;
+    }
+
+    private int generarIdDiaRetiro() {
+        int id = 1;
+        if (!this.diaRetiros.isEmpty()) {
+            int max = 0;
+            for (DiaRetiro diaRetiro : this.diaRetiros) {
+                if (diaRetiro.getId() > max) {
+                    max = diaRetiro.getId();
+                    id = diaRetiro.getId() + 1;
+                }
+            }
+        }
+        return id;
+    }
+    /*
+    Ignacio Oliveto: Preferi hacer un metodo que reciba un booleano si es envio o retiro en lugar de hacer dos metodos
+    me parecio que era menos codigo y se puede reutilizar mas un metodo, se considero ademas que cuando se agrega entrega
+    a nivel flujo del sistema es cuando ya se va a cerrar la compra(En la mayoria de los e comerce que vi sucede de este modo).
+     */
+    public boolean agregarEntrega(Cliente cliente, LocalDate fechaEntrega, boolean efectivo, LocalTime horaDesde,
+                                  LocalTime horaHasta, boolean envio)throws RuntimeException {
+        boolean resultado = false;
         List<Carrito> carritos = this.traerCarrito(cliente.getId(), false);
         if(carritos.isEmpty()){
             throw new RuntimeException("No se detectan carritos abiertos para ese cliente");
         }
         Carrito carrito = carritos.get(0);
+
+        if(envio){
+            carrito.setEntrega(new Envio(1, fechaEntrega, efectivo, horaHasta, horaDesde,
+                    generarCosto(cliente.getContacto().getUbicacion()), cliente.getContacto().getUbicacion()));
+            resultado = true;
+        }else{
+            if(traerDiaRetiro(fechaEntrega.getDayOfWeek().getValue()) == null){
+                throw new RuntimeException("Dia de retiro no valido");
+            }
+            List<Turno> turnos = this.traerTurnos(fechaEntrega, false, horaDesde, horaHasta);
+            if(turnos.isEmpty()){
+                throw new RuntimeException("Horario de retiro invalido");
+            }
+            turnos.get(0).setOcupado(true);
+            carrito.setEntrega(new RetiroLocal(1, fechaEntrega, efectivo, horaDesde));
+        }
+        return resultado;
+    }
+
+    public DiaRetiro traerDiaRetiro(int diaSemana){
+        DiaRetiro diaRetiro = null;
+        int i = 0;
+        while(i<this.diaRetiros.size() && diaRetiro == null ){
+            if(this.diaRetiros.get(i).getDiaSemana() == diaSemana){
+                diaRetiro = this.diaRetiros.get(i);
+            }
+            i++;
+        }
+        return  diaRetiro;
+    }
+
+
+    public double generarCosto(Ubicacion ubicacion) {
+        return (distanciaCoord(ubicacion.getLatitud(), ubicacion.getLongitud(), this.getContacto().getUbicacion().getLatitud()
+                        , this.getContacto().getUbicacion().getLongitud()) * costoPorKm) + costoFijo;
+    }
+
+    public double distanciaCoord(double lat1, double lng1, double lat2, double lng2) {
+        double radioTierra = 6371; //en kilómetros
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double va1 =Math.pow(sindLat, 2)+Math.pow(sindLng, 2)*Math.cos(Math.toRadians(lat1))*
+                Math.cos(Math.toRadians(lat2));
+        double va2 = 2 * Math.atan2(Math.sqrt(va1), Math.sqrt(1 - va1));
+        return radioTierra * va2;
+    }
+
+    public double totalAPagar(int idCliente){
+        Carrito carrito = traerCarrito(idCliente, false).get(0);
+        if(carrito == null){
+            throw  new RuntimeException("No se detectan carritos abiertos para ese cliente");
+        }
+        carrito.setCerrado(true);
         double total = carrito.calcularTotalCarrito() - carrito.calcularDescuentoCarrito(this.diaDescuento,
                 this.porcentajeDescuentoDia, this.porcentajeDescuentoEfectivo);
-        carrito.setCerrado(true);
+        if(carrito.getEntrega().getClass().equals(Envio.class)) {
+            total += ((Envio) carrito.getEntrega()).getCosto();
+        }
         return total;
     }
+    /*
+    Ignacio Oliveto: Traer turnos puede en lugar de recibir solo la fecha tambien si esta diponible u ocupado asi
+    en lugar de tener dos metodos tenemos uno solo, ademas podriamos traerlos por franjas horarias para
+    tener alternativas de turnos.
+     */
+    public List<Turno> traerTurnos(LocalDate fechaEntrega,  boolean ocupado, LocalTime desde, LocalTime hasta){
+        DiaRetiro diaRetiro = this.obtenerDiaRetiro(fechaEntrega);
+        List<Turno> turnos = new ArrayList<>();
+        for (Turno turno: this.turnos) {
+            if(turno.isOcupado() == ocupado && turno.getDia().compareTo(fechaEntrega) == 0 ){
+                if(turno.getHora().compareTo(desde) >= 0 &&
+                        turno.getHora().plusMinutes(diaRetiro.getIntervalo()).compareTo(hasta) <= 0  )
+                turnos.add(turno);
+            }
+        }
+        return turnos;
+    }
+
+
 }

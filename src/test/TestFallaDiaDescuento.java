@@ -68,9 +68,6 @@ public class TestFallaDiaDescuento {
                     System.out.println("\n\n");
                     System.out.println(comercio.getCarritos().get(1));
                     System.out.println("\n\n");
-                    System.out.println("Total a pagar del cliente 1: " + comercio.finalizarCompra(cliente1));
-                    System.out.println("Total a pagar del cliente 2: " + comercio.finalizarCompra(cliente2));
-
 
             }catch (RuntimeException exception){
                     System.out.println("Exception: " + exception.getMessage());

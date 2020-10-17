@@ -3,7 +3,12 @@ package modelo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class RetiroLocal {
+public class RetiroLocal extends Entrega {
+
+    public RetiroLocal(int id, LocalDate fecha, boolean efectivo, LocalTime horaEntrega) {
+        super(id, fecha, efectivo);
+        this.horaEntrega = horaEntrega;
+    }
 
     private LocalTime horaEntrega;
 
@@ -15,7 +20,6 @@ public class RetiroLocal {
         this.horaEntrega = horaEntrega;
     }
 
-    //Segun el Date que le pases es la hora que devuelve
 
     public LocalTime traerHoraRetiro(LocalDate fecha) {
         return getHoraEntrega();

@@ -5,7 +5,7 @@ import modelo.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class TestCasoFeliz {
+public class Test {
 
     public static void main(String[] args) {
 
